@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Painel de Estudos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-principal: #f8fafc;
+            --azul-escuro: #0f172a;
+            --azul-destaque: #2563eb;
+            --verde-sucesso: #10b981;
+            --texto-cor: #334155;
+            --card-branco: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-principal);
+            color: var(--texto-cor);
+            padding-bottom: 40px;
+        }
+
+        /* Topo: Dashboard de Progresso */
+        header {
+            background-color: var(--azul-escuro);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .progresso-container {
+            max-width: 500px;
+            margin: 1rem auto 0 auto;
+        }
+
+        .barra-progresso {
+            background-color: #334155;
+            border-radius: 99px;
+            height: 12px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .preenchimento-progresso {
+            background-color: var(--verde-sucesso);
+            width: 0%; /* Atualizado via JavaScript */
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        /* Conteúdo Central */
+        main {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* Sistema de Abas */
+        .abas-menu {
+            display: flex;
+            background: #e2e8f0;
+            padding: 0.4rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .aba-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            background: transparent;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            border-radius: 6px;
+        }
+
+        .aba-btn.ativa {
+            background-color: var(--card-branco);
+            color: var(--azul-destaque);
+            box-shadow: 0 2px 4px rgb(0 0 0 / 0.05);
+        }
+
+        .conteudo-aba {
+            display: none;
+        }
+
+        .conteudo-aba.ativa {
+            display: block;
+        }
+
+        /* Cards de Matérias */
+        .card-materia {
+            background: var(--card-branco);
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 0.75rem;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .info-materia h3 {
+            font-size: 1rem;
+            color: var(--azul-escuro);
+        }
+
+        .info-materia p {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        /* Checkbox Customizado */
+        .check-estudo {
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            accent-color: var(--verde-sucesso);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Foco nos Estudos</h1>
+        <div class="progresso-container">
+            <p>Concluído: <strong id="porcentagem-texto">0%</strong></p>
+            <div class="barra-progresso">
+                <div class="preenchimento-progresso" id="barra-fill"></div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Navegação de Abas -->
+        <div class="abas-menu">
+            <button class="aba-btn ativa" onclick="mudarAba(event, 'teoria')">📚 Teoria</button>
+            <button class="aba-btn" onclick="mudarAba(event, 'leis')">⚖️ Legislação</button>
+            <button class="aba-btn" onclick="mudarAba(event, 'questoes')">📝 Exercícios</button>
+        </div>
+
+        <!-- Conteúdo das Abas -->
+        <div id="teoria" class="conteudo-aba ativa">
+            <div class="card-materia" data-id="teo_dir_adm">
+                <div class="info-materia">
+                    <h3>Direito Administrativo</h3>
+                    <p>Atos Administrativos: Conceito e Atributos</p>
+                </div>
+                <input type="checkbox" class="check-estudo">
+            </div>
+        </div>
+
+        <div id="leis" class="conteudo-aba">
+            <div class="card-materia" data-id="lei_cf_88">
+                <div class="info-materia">
+                    <h3>Constituição Federal</h3>
+                    <p>Artigo 5º - Direitos e Garantias Fundamentais</p>
+                </div>
+                <input type="checkbox" class="check-estudo">
+            </div>
+        </div>
+
+        <div id="questoes" class="conteudo-aba">
+            <div class="card-materia" data-id="ex_simulado_01">
+                <div class="info-materia">
+                    <h3>Simulado Geral</h3>
+                    <p>Resolução de 30 questões de Engenharia Reversa</p>
+                </div>
+                <input type="checkbox" class="check-estudo">
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Lógica de Alternância das Abas
+        function mudarAba(evento, nomeAba) {
+            const conteudos = document.getElementsByClassName("conteudo-aba");
+            for (let i = 0; i < conteudos.length; i++) {
+                conteudos[i].classList.remove("ativa");
+            }
+            const botoes = document.getElementsByClassName("aba-btn");
+            for (let i = 0; i < botoes.length; i++) {
+                botoes[i].classList.remove("ativa");
+            }
+            document.getElementById(nomeAba).classList.add("ativa");
+            evento.currentTarget.classList.add("ativa");
+        }
+
+        // Lógica do Banco de Dados Local & Progresso
+        const checkboxes = document.querySelectorAll('.check-estudo');
+
+        function atualizarProgresso() {
+            const total = checkboxes.length;
+            const marcados = document.querySelectorAll('.check-estudo:checked').length;
+            const porcentagem = total > 0 ? Math.round((marcados / total) * 100) : 0;
+
+            document.getElementById('porcentagem-texto').innerText = `${porcentagem}%`;
+            document.getElementById('barra-fill').style.width = `${porcentagem}%`;
+        }
+
+        // Salva e recupera dados no navegador do usuário
+        function gerenciarBanco() {
+            checkboxes.forEach(box => {
+                const id = box.closest('.card-materia').getAttribute('data-id');
+                // Recupera do "banco" local
+                box.checked = localStorage.getItem(id) === 'true';
+
+                // Escuta o clique para salvar
+                box.addEventListener('change', (e) => {
+                    localStorage.setItem(id, e.target.checked);
+                    atualizarProgresso();
+                });
+            });
+            atualizarProgresso();
+        }
+
+        document.addEventListener('DOMContentLoaded', gerenciarBanco);
+    </script>
+</body>
+</html>
