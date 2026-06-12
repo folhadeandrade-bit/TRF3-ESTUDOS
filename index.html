@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Painel de Estudos</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Gabaritando TRF 3 - Técnico Judiciário</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-principal: #f8fafc;
-            --azul-escuro: #0f172a;
-            --azul-destaque: #2563eb;
-            --verde-sucesso: #10b981;
-            --texto-cor: #334155;
-            --card-branco: #ffffff;
+            --bg-primary: #f8fafc;
+            --brand-dark: #0f172a;
+            --brand-blue: #1e40af;
+            --brand-accent: #10b981;
+            --text-main: #334155;
+            --card-bg: #ffffff;
+            --chat-bg: #f1f5f9;
         }
 
         * {
@@ -23,207 +24,490 @@
         }
 
         body {
-            background-color: var(--bg-principal);
-            color: var(--texto-cor);
-            padding-bottom: 40px;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
-        /* Topo: Dashboard de Progresso */
+        /* Top Header */
         header {
-            background-color: var(--azul-escuro);
+            background-color: var(--brand-dark);
             color: white;
-            padding: 2rem;
+            padding: 1.5rem;
             text-align: center;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
         }
 
-        .progresso-container {
+        header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .dashboard-progress {
             max-width: 500px;
-            margin: 1rem auto 0 auto;
+            margin: 0.75rem auto 0 auto;
         }
 
-        .barra-progresso {
+        .progress-bar {
             background-color: #334155;
-            border-radius: 99px;
-            height: 12px;
+            border-radius: 9999px;
+            height: 10px;
             overflow: hidden;
-            margin-top: 0.5rem;
+            margin-top: 0.4rem;
         }
 
-        .preenchimento-progresso {
-            background-color: var(--verde-sucesso);
-            width: 0%; /* Atualizado via JavaScript */
+        .progress-fill {
+            background-color: var(--brand-accent);
+            width: 0%; 
             height: 100%;
-            transition: width 0.3s ease;
+            border-radius: 9999px;
+            transition: width 0.4s ease;
         }
 
-        /* Conteúdo Central */
-        main {
-            max-width: 800px;
+        /* Layout Grid */
+        .app-container {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 2rem;
+            max-width: 1400px;
+            width: 100%;
             margin: 2rem auto;
-            padding: 0 1rem;
+            padding: 0 1.5rem;
+            flex-grow: 1;
         }
 
-        /* Sistema de Abas */
-        .abas-menu {
+        @media (max-width: 950px) {
+            .app-container {
+                grid-template-columns: 1fr;
+            }
+            .ai-sidebar {
+                position: static !important;
+                height: 450px !important;
+            }
+        }
+
+        /* Coluna do Edital (Esquerda) */
+        .edital-section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tabs-container {
             display: flex;
             background: #e2e8f0;
-            padding: 0.4rem;
-            border-radius: 8px;
+            padding: 0.3rem;
+            border-radius: 12px;
             margin-bottom: 1.5rem;
         }
 
-        .aba-btn {
+        .tab-btn {
             flex: 1;
-            padding: 0.75rem;
+            padding: 0.8rem;
             border: none;
             background: transparent;
+            font-size: 0.95rem;
             font-weight: 600;
             color: #64748b;
             cursor: pointer;
-            border-radius: 6px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
         }
 
-        .aba-btn.ativa {
-            background-color: var(--card-branco);
-            color: var(--azul-destaque);
-            box-shadow: 0 2px 4px rgb(0 0 0 / 0.05);
+        .tab-btn.active {
+            background-color: var(--card-bg);
+            color: var(--brand-blue);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
         }
 
-        .conteudo-aba {
+        .tab-content {
             display: none;
+            animation: fadeIn 0.3s ease;
         }
 
-        .conteudo-aba.ativa {
+        .tab-content.active {
             display: block;
         }
 
-        /* Cards de Matérias */
-        .card-materia {
-            background: var(--card-branco);
-            border-radius: 8px;
-            padding: 1rem 1.5rem;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.25rem;
             margin-bottom: 0.75rem;
             border: 1px solid #e2e8f0;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .info-materia h3 {
-            font-size: 1rem;
-            color: var(--azul-escuro);
+        .card:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
         }
 
-        .info-materia p {
+        .card-info h3 {
+            font-size: 1.05rem;
+            color: var(--brand-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .card-info p {
             font-size: 0.85rem;
             color: #64748b;
         }
 
-        /* Checkbox Customizado */
-        .check-estudo {
-            width: 22px;
-            height: 22px;
+        .tag {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 4px;
+            margin-bottom: 0.4rem;
+            background-color: #ede9fe;
+            color: #6d28d9;
+        }
+
+        .status-checkbox {
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border: 2px solid #cbd5e1;
+            border-radius: 6px;
             cursor: pointer;
-            accent-color: var(--verde-sucesso);
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .status-checkbox:checked {
+            background-color: var(--brand-accent);
+            border-color: var(--brand-accent);
+        }
+
+        .status-checkbox:checked::after {
+            content: '✓';
+            position: absolute;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Coluna do Agente de IA (Direita) */
+        .ai-sidebar {
+            background: var(--card-bg);
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 180px);
+            min-height: 550px;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05);
+            position: sticky;
+            top: 2rem;
+        }
+
+        .ai-header {
+            background: var(--brand-blue);
+            color: white;
+            padding: 1.1rem;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .ai-messages {
+            flex-grow: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            background-color: var(--chat-bg);
+        }
+
+        .msg {
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            max-width: 85%;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .msg.user {
+            background: var(--brand-blue);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+        }
+
+        .msg.agent {
+            background: white;
+            color: var(--text-main);
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .ai-input-area {
+            padding: 0.75rem;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .ai-input {
+            flex-grow: 1;
+            padding: 0.75rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            outline: none;
+            font-size: 0.9rem;
+        }
+
+        .ai-input:focus {
+            border-color: var(--brand-blue);
+        }
+
+        .ai-send-btn {
+            background: var(--brand-blue);
+            color: white;
+            border: none;
+            padding: 0 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s ease;
+        }
+
+        .ai-send-btn:hover {
+            background: #1d4ed8;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Foco nos Estudos</h1>
-        <div class="progresso-container">
-            <p>Concluído: <strong id="porcentagem-texto">0%</strong></p>
-            <div class="barra-progresso">
-                <div class="preenchimento-progresso" id="barra-fill"></div>
+        <h1>TRF 3ª Região • Técnico Judiciário (TJAA)</h1>
+        <div class="dashboard-progress">
+            <p>Edital Concluído: <strong id="progress-percentage">0%</strong></p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
             </div>
         </div>
     </header>
 
-    <main>
-        <!-- Navegação de Abas -->
-        <div class="abas-menu">
-            <button class="aba-btn ativa" onclick="mudarAba(event, 'teoria')">📚 Teoria</button>
-            <button class="aba-btn" onclick="mudarAba(event, 'leis')">⚖️ Legislação</button>
-            <button class="aba-btn" onclick="mudarAba(event, 'questoes')">📝 Exercícios</button>
-        </div>
-
-        <!-- Conteúdo das Abas -->
-        <div id="teoria" class="conteudo-aba ativa">
-            <div class="card-materia" data-id="teo_dir_adm">
-                <div class="info-materia">
-                    <h3>Direito Administrativo</h3>
-                    <p>Atos Administrativos: Conceito e Atributos</p>
-                </div>
-                <input type="checkbox" class="check-estudo">
+    <div class="app-container">
+        <!-- CRONOGRAMA / EDITAL -->
+        <section class="edital-section">
+            <div class="tabs-container">
+                <button class="tab-btn active" onclick="openTab(event, 'legislacao')">⚖️ Legislação (Lei Seca)</button>
+                <button class="tab-btn" onclick="openTab(event, 'doutrina')">📚 Doutrina & Teoria</button>
+                <button class="tab-btn" onclick="openTab(event, 'exercicios')">📝 Exercícios & Metas</button>
             </div>
-        </div>
 
-        <div id="leis" class="conteudo-aba">
-            <div class="card-materia" data-id="lei_cf_88">
-                <div class="info-materia">
-                    <h3>Constituição Federal</h3>
-                    <p>Artigo 5º - Direitos e Garantias Fundamentais</p>
+            <!-- TAB: LEGISLAÇÃO -->
+            <div id="legislacao" class="tab-content active">
+                <div class="card" data-id="trf3_cf_art1_16">
+                    <div class="card-info">
+                        <span class="tag">Direito Constitucional</span>
+                        <h3>Constituição Federal - Artigos 1º ao 16</h3>
+                        <p>Direitos Fundamentais e Organização Político-Administrativa</p>
+                    </div>
+                    <input type="checkbox" class="status-checkbox">
                 </div>
-                <input type="checkbox" class="check-estudo">
+                <div class="card" data-id="trf3_cf_pjud">
+                    <div class="card-info">
+                        <span class="tag">Direito Constitucional</span>
+                        <h3>Poder Judiciário & TRF - Artigos 92 ao 110</h3>
+                        <p>Foco total nas Competências da Justiça Federal (Art. 109)</p>
+                    </div>
+                    <input type="checkbox" class="status-checkbox">
+                </div>
+                <div class="card" data-id="trf3_lei_8112">
+                    <div class="card-info">
+                        <span class="tag">Direito Administrativo</span>
+                        <h3>Lei nº 8.112/1990 - Regime Jurídico</h3>
+                        <p>Provimento, vacância, direitos, vantagens e regime disciplinar</p>
+                    </div>
+                    <input type="checkbox" class="status-checkbox">
+                </div>
+                <div class="card" data-id="trf3_lei_14133">
+                    <div class="card-info">
+                        <span class="tag">Direito Administrativo</span>
+                        <h3>Nova Lei de Licitações - Lei nº 14.133/21</h3>
+                        <p>Foco em Contratação Direta (Dispensa e Inexigibilidade)</p>
+                    </div>
+                    <input type="checkbox" class="status-checkbox">
+                </div>
             </div>
-        </div>
 
-        <div id="questoes" class="conteudo-aba">
-            <div class="card-materia" data-id="ex_simulado_01">
-                <div class="info-materia">
-                    <h3>Simulado Geral</h3>
-                    <p>Resolução de 30 questões de Engenharia Reversa</p>
+            <!-- TAB: DOUTRINA -->
+            <div id="doutrina" class="tab-content">
+                <div class="card" data-id="trf3_dout_atos">
+                    <div class="card-info">
+                        <span class="tag">Direito Administrativo</span>
+                        <h3>Atos Administrativos</h3>
+                        <p>Atributos (PATI), Requisitos (COFIFOMOB) e Extinção dos Atos</p>
+                    </div>
+                    <input type="checkbox" class="status-checkbox">
                 </div>
-                <input type="checkbox" class="check-estudo">
+                <div class="card" data-id="trf3_dout_adm_indireta">
+                    <div class="card-info">
+                        <span class="tag">Direito Administrativo</span>
+                        <h3>Organização Administrativa</h3>
+                        <p>Administração Direta e Indireta (Autarquias, Fundações, Empresas Públicas)</p>
+                    </div>
+                    <input type="checkbox" class="status-checkbox">
+                </div>
+                <div class="card" data-id="trf3_dout_gestao">
+                    <div class="card-info">
+                        <span class="tag">Gestão Pública</span>
+                        <h3>Noções de Governança e Gestão de Processos</h3>
+                        <p>Ferramentas de qualidade, eficiência e indicadores de desempenho</p>
+                    </div>
+                    <input type="checkbox" class="status-checkbox">
+                </div>
             </div>
-        </div>
-    </main>
+
+            <!-- TAB: EXERCÍCIOS -->
+            <div id="exercicios" class="tab-content">
+                <div class="card" data-id="trf3_ex_portugues">
+                    <div class="card-info">
+                        <span class="tag">Língua Portuguesa</span>
+                        <h3>Engenharia Reversa - Interpretação e Sintaxe</h3>
+                        <p>Meta: Resolver 50 questões focadas no perfil da banca do TRF3</p>
+                    </div>
+                    <input type="checkbox" class="status-checkbox">
+                </div>
+                <div class="card" data-id="trf3_ex_raciocinio">
+                    <div class="card-info">
+                        <span class="tag">Raciocínio Lógico</span>
+                        <h3>Estruturas Lógicas e Diagramas de Conjuntos</h3>
+                        <p>Meta: Caderno de 30 questões comentadas</p>
+                    </div>
+                    <input type="checkbox" class="status-checkbox">
+                </div>
+                <div class="card" data-id="trf3_ex_simulado">
+                    <div class="card-info">
+                        <span class="tag">Simulado Geral</span>
+                        <h3>Simulado Técnico de Véspera</h3>
+                        <p>60 questões cronometradas com peso de edital</p>
+                    </div>
+                    <input type="checkbox" class="status-checkbox">
+                </div>
+            </div>
+        </section>
+
+        <!-- CHAT DO AGENTE DE IA -->
+        <aside class="ai-sidebar">
+            <div class="ai-header">
+                🤖 AprovaIA — Mentor TRF 3
+            </div>
+            <div class="ai-messages" id="ai-messages">
+                <div class="msg agent">
+                    Olá! Estou calibrado para o edital de **Técnico Judiciário do TRF 3**. 
+                    <br><br>
+                    Use os comandos comandos especificos como **`/sabatina`** acompanhado do tema para testar seus conhecimentos, ou peça um **`/resumo`**. Qual ponto do edital vamos detonar hoje?
+                </div>
+            </div>
+            <div class="ai-input-area">
+                <input type="text" class="ai-input" id="ai-input" placeholder="Ex: /sabatina Artigo 109 da CF" onkeypress="handleKeyPress(event)">
+                <button class="ai-send-btn" onclick="sendMessage()">Enviar</button>
+            </div>
+        </aside>
+    </div>
 
     <script>
-        // Lógica de Alternância das Abas
-        function mudarAba(evento, nomeAba) {
-            const conteudos = document.getElementsByClassName("conteudo-aba");
-            for (let i = 0; i < conteudos.length; i++) {
-                conteudos[i].classList.remove("ativa");
-            }
-            const botoes = document.getElementsByClassName("aba-btn");
-            for (let i = 0; i < botoes.length; i++) {
-                botoes[i].classList.remove("ativa");
-            }
-            document.getElementById(nomeAba).classList.add("ativa");
-            evento.currentTarget.classList.add("ativa");
+        // Navegação de Abas
+        function openTab(evt, tabName) {
+            const tabContents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabContents.length; i++) { tabContents[i].classList.remove("active"); }
+            const tabBtns = document.getElementsByClassName("tab-btn");
+            for (let i = 0; i < tabBtns.length; i++) { tabBtns[i].classList.remove("active"); }
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
         }
 
-        // Lógica do Banco de Dados Local & Progresso
-        const checkboxes = document.querySelectorAll('.check-estudo');
-
-        function atualizarProgresso() {
+        // Sistema de Banco de Dados Local (LocalStorage)
+        const checkboxes = document.querySelectorAll('.status-checkbox');
+        
+        function updateProgress() {
             const total = checkboxes.length;
-            const marcados = document.querySelectorAll('.check-estudo:checked').length;
-            const porcentagem = total > 0 ? Math.round((marcados / total) * 100) : 0;
-
-            document.getElementById('porcentagem-texto').innerText = `${porcentagem}%`;
-            document.getElementById('barra-fill').style.width = `${porcentagem}%`;
+            const checked = document.querySelectorAll('.status-checkbox:checked').length;
+            const percentage = total > 0 ? Math.round((checked / total) * 100) : 0;
+            document.getElementById('progress-percentage').innerText = `${percentage}%`;
+            document.getElementById('progress-fill').style.width = `${percentage}%`;
         }
 
-        // Salva e recupera dados no navegador do usuário
-        function gerenciarBanco() {
-            checkboxes.forEach(box => {
-                const id = box.closest('.card-materia').getAttribute('data-id');
-                // Recupera do "banco" local
-                box.checked = localStorage.getItem(id) === 'true';
-
-                // Escuta o clique para salvar
-                box.addEventListener('change', (e) => {
-                    localStorage.setItem(id, e.target.checked);
-                    atualizarProgresso();
-                });
+        function loadProgress() {
+            checkboxes.forEach(checkbox => {
+                const cardId = checkbox.closest('.card').getAttribute('data-id');
+                checkbox.checked = localStorage.getItem(cardId) === 'true';
             });
-            atualizarProgresso();
+            updateProgress();
         }
 
-        document.addEventListener('DOMContentLoaded', gerenciarBanco);
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', (e) => {
+                const cardId = e.target.closest('.card').getAttribute('data-id');
+                localStorage.setItem(cardId, e.target.checked);
+                updateProgress();
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', loadProgress);
+
+        // Chatbot Integrado (Simulação Pronta para Receber Webhook/API)
+        function sendMessage() {
+            const input = document.getElementById('ai-input');
+            const messageText = input.value.trim();
+            if (!messageText) return;
+
+            const chatWindow = document.getElementById('ai-messages');
+
+            // Mensagem do Aluno
+            const userMsg = document.createElement('div');
+            userMsg.className = 'msg user';
+            userMsg.innerText = messageText;
+            chatWindow.appendChild(userMsg);
+
+            input.value = '';
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+
+            // Inteligência do Agente Simulada Localmente
+            setTimeout(() => {
+                const agentMsg = document.createElement('div');
+                agentMsg.className = 'msg agent';
+                const lowerText = messageText.toLowerCase();
+                
+                if (lowerText.includes('/sabatina') && lowerText.includes('109')) {
+                    agentMsg.innerHTML = "⚖️ **Sabatina TRF 3 iniciada!**<br><br>Uma causa movida por um cidadão contra a Caixa Econômica Federal (empresa pública federal) deve ser processada na Justiça Federal ou na Justiça Estadual comum?<br><br>*Pense na resposta e use nossa Engenharia Reversa!*";
+                } else if (lowerText.includes('/resumo') && lowerText.includes('8112')) {
+                    agentMsg.innerHTML = "📚 **Resumo Relâmpago (Lei 8.112):**<br><br>Guarde as formas de **Provimento** com o mnemônico **PANTA R4**:<br>• **P**romoção<br>• **A**proveitamento<br>• **N**omeação (única originária!)<br>• **T**ransferência (Inconstitucional)<br>• **A**ndamento (Adaptado)<br>• **Readmissão** (Inconstitucional), **Reintegração** (Invalidação da demissão), **Recondução** (Retorno do estável), **Reversão** (Retorno do aposentado).";
+                } else {
+                    agentMsg.innerHTML = "Entendi o comando! Para conectar este chat a um cérebro de IA real com o prompt completo do **AprovaIA**, você pode integrar este campo a uma API do Gemini ou OpenAI usando plataformas no-code como Dify ou Flowise.";
+                }
+                
+                chatWindow.appendChild(agentMsg);
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+            }, 1000);
+        }
+
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') sendMessage();
+        }
     </script>
 </body>
 </html>
